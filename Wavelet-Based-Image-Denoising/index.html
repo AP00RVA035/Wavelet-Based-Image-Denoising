@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wavelet Denoise</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo-area">
+            <div class="logo">W</div>
+            <div>
+                <h2>Wavelet<span>Denoise</span></h2>
+                <p>Image Denoising System</p>
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <select id="themeSelect" class="theme-select">
+                <option value="dark">🌙 Dark</option>
+                <option value="light">☀ Light</option>
+            </select>
+
+            <button class="nav-btn" id="resetAll">
+                ↻ Reset
+            </button>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- TITLE -->
+        <section class="hero">
+            <div class="hero-icon">✦</div>
+
+            <div>
+                <h1>Wavelet-Based <span>Image Denoising</span></h1>
+                <p>Remove noise from images using wavelet thresholding techniques</p>
+            </div>
+        </section>
+
+
+        <!-- TOP CONTROLS -->
+        <section class="top-grid">
+
+            <!-- IMAGE INPUT -->
+            <div class="card upload-card">
+
+                <div class="card-title">
+                    <div class="title-icon">⬆</div>
+                    <h3>Image Input</h3>
+                </div>
+
+                <div class="upload-box" id="uploadBox">
+
+                    <div class="upload-icon">☁</div>
+
+                    <h3>Choose an Image</h3>
+                    <p>JPG, JPEG or PNG</p>
+
+                    <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/png, image/jpeg, image/jpg"
+                        hidden
+                    >
+
+                    <button class="primary-btn" id="chooseImage">
+                        Choose File
+                    </button>
+
+                    <p id="fileName" class="file-name">
+                        No file selected
+                    </p>
+
+                </div>
+
+                <div class="image-actions">
+
+                    <button class="secondary-btn" id="removeImage">
+                        🗑 Remove Image
+                    </button>
+
+                    <button class="secondary-btn" id="imageInfoBtn">
+                        ℹ Image Info
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- DENOISING SETTINGS -->
+            <div class="card settings-card">
+
+                <div class="card-title">
+                    <div class="title-icon">⚙</div>
+                    <h3>Denoising Settings</h3>
+                </div>
+
+
+                <div class="setting-row">
+
+                    <label for="thresholdType">
+                        Threshold Type
+                    </label>
+
+                    <select id="thresholdType">
+                        <option value="soft">Soft Threshold</option>
+                        <option value="hard">Hard Threshold</option>
+                    </select>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div class="label-line">
+                        <label for="threshold">
+                            Threshold
+                        </label>
+
+                        <span id="thresholdValue">20</span>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="threshold"
+                        min="1"
+                        max="100"
+                        value="20"
+                    >
+
+                </div>
+
+
+                <div class="button-row">
+
+                    <button class="preview-btn" id="previewButton">
+                        👁 Preview Changes
+                    </button>
+
+                    <button class="denoise-btn" id="denoiseButton">
+                        ✨ Denoise Image
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- IMAGE RESULTS -->
+        <section class="card results-card">
+
+            <div class="results-heading">
+
+                <div class="card-title">
+                    <div class="title-icon">▣</div>
+                    <h3>Denoising Results</h3>
+                </div>
+
+                <span id="statusText" class="status">
+                    Ready
+                </span>
+
+            </div>
+
+
+            <div class="image-grid">
+
+                <!-- ORIGINAL -->
+                <div class="image-panel original-panel">
+
+                    <div class="image-header">
+
+                        <div>
+                            <span class="image-dot blue"></span>
+                            Original Image
+                        </div>
+
+                        <span class="tag blue-tag">
+                            INPUT
+                        </span>
+
+                    </div>
+
+                    <div class="image-container">
+
+                        <div id="originalPlaceholder" class="placeholder">
+                            <div>🖼</div>
+                            <p>Upload an image to view it here</p>
+                        </div>
+
+                        <img
+                            id="originalImage"
+                            alt="Original image"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- DENOISED -->
+                <div class="image-panel denoised-panel">
+
+                    <div class="image-header">
+
+                        <div>
+                            <span class="image-dot pink"></span>
+                            Denoised Image
+                        </div>
+
+                        <span class="tag pink-tag">
+                            OUTPUT
+                        </span>
+
+                    </div>
+
+                    <div class="image-container">
+
+                        <div id="denoisedPlaceholder" class="placeholder">
+                            <div>✦</div>
+                            <p>Denoised image will appear here</p>
+                        </div>
+
+                        <img
+                            id="denoisedImage"
+                            alt="Denoised image"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- IMAGE INFORMATION -->
+        <section class="bottom-grid">
+
+            <div class="card info-card">
+
+                <div class="card-title">
+                    <div class="title-icon">ℹ</div>
+                    <h3>Image Information</h3>
+                </div>
+
+                <div class="info-content">
+
+                    <div class="info-item">
+                        <span>Name</span>
+                        <strong id="infoName">-</strong>
+                    </div>
+
+                    <div class="info-item">
+                        <span>Format</span>
+                        <strong id="infoFormat">-</strong>
+                    </div>
+
+                    <div class="info-item">
+                        <span>Dimensions</span>
+                        <strong id="infoDimensions">-</strong>
+                    </div>
+
+                    <div class="info-item">
+                        <span>File Size</span>
+                        <strong id="infoSize">-</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HELP -->
+            <div class="card help-card">
+
+                <div class="card-title">
+                    <div class="title-icon">?</div>
+                    <h3>Help & Guide</h3>
+                </div>
+
+                <p>
+                    Upload an image, select a thresholding method,
+                    adjust the threshold value and apply denoising.
+                </p>
+
+                <div class="guide-steps">
+
+                    <div>
+                        <span>1</span>
+                        Upload Image
+                    </div>
+
+                    <div>
+                        <span>2</span>
+                        Select Threshold
+                    </div>
+
+                    <div>
+                        <span>3</span>
+                        Preview Changes
+                    </div>
+
+                    <div>
+                        <span>4</span>
+                        Denoise Image
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DOWNLOAD -->
+        <section class="card download-card">
+
+            <div class="card-title">
+                <div class="title-icon">⇩</div>
+                <h3>Download Results</h3>
+            </div>
+
+            <div class="download-buttons">
+
+                <button
+                    class="download-original"
+                    id="downloadOriginal"
+                >
+                    ⇩ Download Original
+                </button>
+
+                <button
+                    class="download-denoised"
+                    id="downloadDenoised"
+                >
+                    ⇩ Download Denoised
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <span>Wavelet-Based Image Denoising</span>
+        <span>•</span>
+        <span>DWT & Thresholding</span>
+    </footer>
+
+
+    <!-- IMAGE INFO POPUP -->
+    <div class="modal" id="infoModal">
+
+        <div class="modal-content">
+
+            <button class="close-modal" id="closeModal">
+                ×
+            </button>
+
+            <h2>Image Information</h2>
+
+            <div class="modal-info">
+
+                <p>
+                    <strong>Name:</strong>
+                    <span id="modalName">-</span>
+                </p>
+
+                <p>
+                    <strong>Format:</strong>
+                    <span id="modalFormat">-</span>
+                </p>
+
+                <p>
+                    <strong>Dimensions:</strong>
+                    <span id="modalDimensions">-</span>
+                </p>
+
+                <p>
+                    <strong>File Size:</strong>
+                    <span id="modalSize">-</span>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
